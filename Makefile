@@ -38,4 +38,10 @@ docker-rebuild:
 composer-install:
 	docker compose run --rm php-cli composer install
 
+# Dump composer autoload.
+composer-dump:
+	docker compose run --rm php-cli composer dump-autoload
 
+# Run phpstan analyze
+phpstan:
+	docker compose run --rm php-cli composer phpstan
