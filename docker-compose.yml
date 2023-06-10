@@ -1,0 +1,32 @@
+# Run LOCAL-DEV services
+
+services:
+  nginx:
+    build:
+      context: docker/nginx
+      dockerfile: Dockerfile
+      target: app_nginx_local
+      args:
+        VERSION: 1.25-alpine    # NGINX alpine version
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./app/public/:/app/public
+    depends_on:
+      php-fpm:
+        condition: service_healthy
+
+  php-fpm:
+    build:
+      context: docker/php
+      dockerfile: Dockerfile
+      target: app_php_local
+      args:
+        VERSION: 7.4-fpm-alpine     # PHP alpine version
+        XDEBUG_VERSION: 3.1.6       # XDEBUG version should support php version
+    restart: always
+    volumes:
+      - ./app:/app
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
