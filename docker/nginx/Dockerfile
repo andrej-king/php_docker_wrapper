@@ -1,6 +1,6 @@
-ARG VERSION
+ARG NGINX_VERSION
 
-FROM nginx:${VERSION} AS app_nginx
+FROM nginx:${NGINX_VERSION} AS app_nginx
 
 # Install curl (for check image health)
 RUN apk add --no-cache curl

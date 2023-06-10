@@ -2,12 +2,14 @@
 
 services:
     nginx:
+        platform: linux/amd64
         build:
             context: docker/nginx
             dockerfile: Dockerfile
             target: app_nginx_local
             args:
-                VERSION: 1.25-alpine    # NGINX alpine version
+                # https://hub.docker.com/_/nginx/tags?name=alpine
+                NGINX_VERSION: 1.25-alpine    # NGINX alpine version
         restart: always
         ports:
             - "8080:8080"
@@ -18,15 +20,36 @@ services:
                 condition: service_healthy
 
     php-fpm:
+        platform: linux/amd64
         build:
             context: docker/php
             dockerfile: Dockerfile
-            target: app_php_local
+            target: app_php_fpm_local
             args:
-                VERSION: 7.4-fpm-alpine     # PHP alpine version
-                XDEBUG_VERSION: 3.1.6       # XDEBUG version should support php version
+                # https://hub.docker.com/_/php/tags?name=alpine
+                PHP_FPM_VERSION: 7.4-fpm-alpine     # PHP FPM alpine version
+                # https://hub.docker.com/_/php/tags?name=alpine
+                PHP_CLI_VERSION: 7.4-cli-alpine     # PHP CLI alpine version
+                # https://xdebug.org/download/historical
+                XDEBUG_VERSION: 3.1.6               # XDEBUG version should support PHP version
         restart: always
         volumes:
             - ./app:/app
         extra_hosts:
             - "host.docker.internal:host-gateway"
+
+    php-cli:
+        platform: linux/amd64
+        build:
+            context: docker/php
+            dockerfile: Dockerfile
+            target: app_php_cli_local
+            args:
+                # https://hub.docker.com/_/php/tags?name=alpine
+                PHP_FPM_VERSION: 7.4-fpm-alpine     # PHP FPM alpine version
+                # https://hub.docker.com/_/php/tags?name=alpine
+                PHP_CLI_VERSION: 7.4-cli-alpine     # PHP CLI alpine version
+                # https://xdebug.org/download/historical
+                XDEBUG_VERSION: 3.1.6               # XDEBUG version should support PHP version
+        volumes:
+            - ./app:/app

@@ -4,6 +4,12 @@ init: docker-down-clear docker-build docker-up
 # Stop dev docker containers.
 down: docker-down-clear
 
+# Initial setup for app.
+app-init: composer-install
+
+tests:
+	docker compose run --rm php-cli composer test
+
 # Run docker containers from dev docker compose file.
 docker-up:
 	docker compose up --remove-orphans -d
@@ -27,3 +33,9 @@ docker-build:
 # Force rebuild docker images from dev docker compose file.
 docker-rebuild:
 	docker compose build --no-cache
+
+# Install composer dependencies.
+composer-install:
+	docker compose run --rm php-cli composer install
+
+
