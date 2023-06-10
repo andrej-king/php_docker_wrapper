@@ -41,8 +41,6 @@ RUN apk add --no-cache unzip
 
 # Install composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-#ENV COMPOSER_ALLOW_SUPEUSER 1
-#RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet
 
 # Copy common config files
 COPY ./common/conf.d /usr/local/etc/php/conf.d
